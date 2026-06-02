@@ -1,23 +1,21 @@
 ﻿namespace Practice.Domain;
 
-public abstract class User
+public sealed class User : Entity
 {
-    public Guid Id { get; set; }
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
-    public int Age { get; set; }
+    public string FirstName { get; private set; } = string.Empty;
+    public string LastName { get; private set; } = string.Empty;
+    public int Age { get; private set; }
 
-    protected User() { }
+    private User() { }
 
-    public User(Guid id, string firstName, string lastName, int age)
+    public User(string firstName, string lastName, int age)
     {
-        Id = id;
         FirstName = firstName;
         LastName = lastName;
         Age = age;
     }
 
-    public void Validate(Guid id, string firstName, string lastName, int age)
+    public void Create(string firstName, string lastName, int age)
     {
         if (string.IsNullOrWhiteSpace(firstName))
             throw new DomainException("First name is required.");
@@ -28,9 +26,25 @@ public abstract class User
         if (age < 0 || age > 100)
             throw new DomainException("Age must be between 0 and 100.");
 
-        Id = id;
         FirstName = firstName;
         LastName = lastName;
         Age = age;
+    }
+
+    public void Update(string firstName, string lastName, int age)
+    {
+        if (string.IsNullOrWhiteSpace(firstName))
+            throw new DomainException("First name is required.");
+
+        if (string.IsNullOrWhiteSpace(lastName))
+            throw new DomainException("Last name is required.");
+
+        if (age < 0 || age > 100)
+            throw new DomainException("Age must be between 0 and 100.");
+
+        FirstName = firstName;
+        LastName = lastName;
+        Age = age;
+        SetUpdateAt();
     }
 }
