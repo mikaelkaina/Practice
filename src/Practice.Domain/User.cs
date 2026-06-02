@@ -10,21 +10,7 @@ public sealed class User : Entity
 
     public User(string firstName, string lastName, int age)
     {
-        FirstName = firstName;
-        LastName = lastName;
-        Age = age;
-    }
-
-    public void Create(string firstName, string lastName, int age)
-    {
-        if (string.IsNullOrWhiteSpace(firstName))
-            throw new DomainException("First name is required.");
-
-        if (string.IsNullOrWhiteSpace(lastName))
-            throw new DomainException("Last name is required.");
-
-        if (age < 0 || age > 100)
-            throw new DomainException("Age must be between 0 and 100.");
+        Validate(firstName, lastName, age);
 
         FirstName = firstName;
         LastName = lastName;
@@ -33,6 +19,16 @@ public sealed class User : Entity
 
     public void Update(string firstName, string lastName, int age)
     {
+        Validate(firstName, lastName, age);
+
+        FirstName = firstName;
+        LastName = lastName;
+        Age = age;
+        SetUpdateAt();
+    }
+
+    public void Validate(string firstName, string lastName, int age)
+    {
         if (string.IsNullOrWhiteSpace(firstName))
             throw new DomainException("First name is required.");
 
@@ -45,6 +41,5 @@ public sealed class User : Entity
         FirstName = firstName;
         LastName = lastName;
         Age = age;
-        SetUpdateAt();
     }
 }
