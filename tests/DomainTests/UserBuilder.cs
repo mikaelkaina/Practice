@@ -3,14 +3,8 @@ using Practice.Domain;
 
 namespace DomainTests;
 
-public class TestUser : User
-{
-    public TestUser() : base() { }
-    public TestUser(Guid id, string firstName, string lastName, int age) : base(id, firstName, lastName, age) { }
-}
 public class UserBuilder
 {
-    private Guid _id;
     private string _firstName;
     private string _lastName;
     private int _age;
@@ -18,15 +12,14 @@ public class UserBuilder
     public UserBuilder()
     {
         var faker = new Faker();
-        _id = Guid.NewGuid();
         _firstName = faker.Name.FirstName();
         _lastName = faker.Name.LastName();
         _age = faker.Random.Int(0, 100);
     }
 
-    public UserBuilder WithFirstName(string firstName)
+    public UserBuilder WithFirstName(string? firstName)
     {
-        _firstName = firstName;
+        _firstName = firstName!;
         return this;
     }
 
@@ -42,8 +35,8 @@ public class UserBuilder
         return this;
     }
 
-    public Action BuildValidateAction()
+    public User Build()
     {
-        return () => new TestUser().Validate(_id, _firstName, _lastName, _age);
+        return new User(_firstName, _lastName, _age);
     }
 }
