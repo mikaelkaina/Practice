@@ -23,9 +23,9 @@ public class UserBuilder
         return this;
     }
 
-    public UserBuilder WithLastName(string lastName)
+    public UserBuilder WithLastName(string? lastName)
     {
-        _lastName = lastName;
+        _lastName = lastName!;
         return this;
     }
 

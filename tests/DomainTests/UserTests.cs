@@ -39,7 +39,7 @@ public class UserTests
     [InlineData("")]
     [InlineData(" ")]
     [InlineData(null)]
-    public void Contructor_WithInvalidFirstName_ShouldThrowDomainException(string? invalidFirstName)
+    public void Constructor_WithInvalidFirstName_ShouldThrowDomainException(string? invalidFirstName)
     {
         Action action = () => new UserBuilder().WithFirstName(invalidFirstName).Build();
 
@@ -48,9 +48,21 @@ public class UserTests
     }
 
     [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData(null)]
+    public void Constructor_WithInvalidLastName_ShouldThrowDomainException(string? invalidLastName)
+    {
+        Action action = () => new UserBuilder().WithLastName(invalidLastName).Build();
+
+        action.Should().Throw<DomainException>()
+            .WithMessage("Last name is required.");
+    }
+
+    [Theory]
     [InlineData(-1)]
     [InlineData(101)]
-    public void Contructor_WithInvalidAge_ShouldThrowDomainException(int invalidAge)
+    public void Constructor_WithInvalidAge_ShouldThrowDomainException(int invalidAge)
     {
         Action action = () => new UserBuilder().WithAge(invalidAge).Build();
 
