@@ -20,12 +20,12 @@ public sealed class Email : ValueObject
     public static Email Create(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
-            throw new DomainException("Email cannot be empty.", nameof(email));
+            throw new DomainException("Email is required.");
 
         var normalizedEmail = email.Trim().ToLowerInvariant();
 
-        if (!EmailRegex.IsMatch(email))
-            throw new DomainException("Invalid email format.", nameof(email));
+        if (!EmailRegex.IsMatch(normalizedEmail))
+            throw new DomainException("Invalid email format.");
 
         return new Email(normalizedEmail);
     }

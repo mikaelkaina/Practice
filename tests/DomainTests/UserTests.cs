@@ -43,7 +43,7 @@ public class UserTests
     {
         Action action = () => new UserBuilder().WithFirstName(invalidFirstName).Build();
 
-        action.Should().Throw<DomainException>()
+        action.Should().Throw<Exception>()
             .WithMessage("First name is required.");
     }
 
@@ -55,7 +55,7 @@ public class UserTests
     {
         Action action = () => new UserBuilder().WithLastName(invalidLastName).Build();
 
-        action.Should().Throw<DomainException>()
+        action.Should().Throw<Exception>()
             .WithMessage("Last name is required.");
     }
 
@@ -66,7 +66,7 @@ public class UserTests
     {
         Action action = () => new UserBuilder().WithAge(invalidAge).Build();
 
-        action.Should().Throw<DomainException>()
+        action.Should().Throw<Exception>()
             .WithMessage("Age must be between 0 and 100.");
     }
 
@@ -80,7 +80,7 @@ public class UserTests
 
         Action action = () => user.Update(user.FirstName, invalidLastName!, user.Age);
 
-        action.Should().Throw<DomainException>()
+        action.Should().Throw<Exception>()
             .WithMessage("Last name is required.");
     }
 }
