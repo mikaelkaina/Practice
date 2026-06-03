@@ -1,12 +1,12 @@
-﻿namespace Practice.Domain;
+﻿using Practice.Domain.Common;
+
+namespace Practice.Domain.Entities;
 
 public sealed class User : Entity
 {
     public string FirstName { get; private set; } = string.Empty;
     public string LastName { get; private set; } = string.Empty;
     public int Age { get; private set; }
-
-    private User() { }
 
     public User(string firstName, string lastName, int age)
     {

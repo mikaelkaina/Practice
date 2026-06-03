@@ -1,4 +1,4 @@
-﻿namespace Practice.Domain;
+﻿namespace Practice.Domain.Common;
 
 public abstract class Entity
 {

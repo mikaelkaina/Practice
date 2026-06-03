@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using Practice.Domain;
+using Practice.Domain.Entities;
 
 namespace DomainTests;
 
