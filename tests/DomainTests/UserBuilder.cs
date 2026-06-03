@@ -16,8 +16,7 @@ public class UserBuilder
         var faker = new Faker();
         _firstName = faker.Name.FirstName();
         _lastName = faker.Name.LastName();
-        _email = faker.Name.Email;
-        
+        _email = Email.Create(faker.Internet.Email());
         _age = faker.Random.Int(0, 100);
     }
 
@@ -32,6 +31,12 @@ public class UserBuilder
         _lastName = lastName!;
         return this;
     }
+    
+    public UserBuilder WithEmail(Email? email)
+    {
+        _email = email!;
+        return this;
+    }
 
     public UserBuilder WithAge(int age)
     {
@@ -39,7 +44,7 @@ public class UserBuilder
         return this;
     }
 
-    public User Build()
+    public User returnUser()
     {
         return new User(_firstName, _lastName, _email, _age);
     }
