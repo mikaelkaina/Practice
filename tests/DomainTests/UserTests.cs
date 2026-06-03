@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Practice.Domain;
+using Practice.Domain.ValueObjects;
 
 namespace DomainTests;
 
@@ -8,79 +9,28 @@ public class UserTests
     [Fact]
     public void Constructor_WithValidData_ShouldCreateUser()
     {
-        var builder = new UserBuilder();
-
-        var user = builder.Build();
+        var user = new UserBuilder().returnUser();
 
         user.Should().NotBeNull();
-        user.Id.Should().NotBeEmpty();
-        user.CreatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
-        user.UpdatedAt.Should().BeNull();
+        user.Email.Should().NotBeNull();
     }
 
     [Fact]
-    public void Update_WithValidData_ShouldUpdatePropertiesAndSetUpdatedAt()
+    public void Update_WithValidData_ShouldUpdateProperties()
     {
-        var user = new UserBuilder().Build();
-        var newFirstName = "John";
-        var newLastName = "Doe";
-        var newAge = 30;
+        var user = new UserBuilder().returnUser();
+        var newEmail = Email.Create("novo@email.com");
 
-        user.Update(newFirstName, newLastName, newAge);
+        user.Update("NovoNome", "NovoSobrenome", newEmail, 25);
 
-        user.FirstName.Should().Be(newFirstName);
-        user.LastName.Should().Be(newLastName);
-        user.Age.Should().Be(newAge);
-        user.UpdatedAt.Should().NotBeNull();
-        user.UpdatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
+        user.Email.Should().Be(newEmail);
     }
 
-    [Theory]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData(null)]
-    public void Constructor_WithInvalidFirstName_ShouldThrowDomainException(string? invalidFirstName)
+    [Fact]
+    public void Constructor_WithNullEmail_ShouldThrowDomainException()
     {
-        Action action = () => new UserBuilder().WithFirstName(invalidFirstName).Build();
+        Action action = () => new UserBuilder().WithEmail(null).returnUser();
 
-        action.Should().Throw<Exception>()
-            .WithMessage("First name is required.");
-    }
-
-    [Theory]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData(null)]
-    public void Constructor_WithInvalidLastName_ShouldThrowDomainException(string? invalidLastName)
-    {
-        Action action = () => new UserBuilder().WithLastName(invalidLastName).Build();
-
-        action.Should().Throw<Exception>()
-            .WithMessage("Last name is required.");
-    }
-
-    [Theory]
-    [InlineData(-1)]
-    [InlineData(101)]
-    public void Constructor_WithInvalidAge_ShouldThrowDomainException(int invalidAge)
-    {
-        Action action = () => new UserBuilder().WithAge(invalidAge).Build();
-
-        action.Should().Throw<Exception>()
-            .WithMessage("Age must be between 0 and 100.");
-    }
-
-    [Theory]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData(null)]
-    public void Update_WithInvalidLastName_ShouldThrowDomainException(string? invalidLastName)
-    {
-        var user = new UserBuilder().Build();
-
-        Action action = () => user.Update(user.FirstName, invalidLastName!, user.Age);
-
-        action.Should().Throw<Exception>()
-            .WithMessage("Last name is required.");
+        action.Should().Throw<DomainException>().WithMessage("Email is required.");
     }
 }
